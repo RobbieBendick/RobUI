@@ -1,0 +1,11 @@
+## Interface: 110005
+## Author: Mageiden
+## Title: RobUI
+## Notes: Gives your group class-based Raid Markers in arena.
+## DefaultState: enabled
+## Version: v0.0.1
+## SavedVariables: RobUIDB
+embeds.xml
+
+Config.lua
+RobUI.lua
