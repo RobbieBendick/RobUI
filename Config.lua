@@ -105,11 +105,13 @@ function Rob:HandleHealthbarAndNameColors()
             if Rob.db.profile.isClassColoredHealthbarsEnabled then
                 healthbar:SetStatusBarColor(color.r, color.g, color.b)
             end
-            return color.r, color.g, color.b
         else
+            if UnitIsTapDenied(unit) then
+                healthbar:SetStatusBarColor(0.5, 0.5, 0.5, 1)
+                return
+            end
             local r, g, b = UnitSelectionColor(unit)
-            healthbar:SetStatusBarColor(1, 1, 1)
-            return r, g, b
+            healthbar:SetStatusBarColor(r, g, b)
         end
     end
     
@@ -146,6 +148,10 @@ function Rob:HandleHealthbarAndNameColors()
                 local color = RAID_CLASS_COLORS[class]
                 self:SetStatusBarColor(color.r, color.g, color.b)
             else
+                if UnitIsTapDenied(unit) then
+                    self:SetStatusBarColor(0.5, 0.5, 0.5, 1)
+                    return
+                end
                 local r, g, b = UnitSelectionColor(unit)
                 self:SetStatusBarColor(r, g, b)
             end
