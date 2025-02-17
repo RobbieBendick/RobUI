@@ -6,6 +6,7 @@ local AceDBOptions = LibStub("AceDBOptions-3.0")
 addon.name = "RobUI"
 Rob.name = "RobUI"
 local FRAME_TEXTURE = [[Interface\AddOns\RobUI\Textures\UI-TargetingFrame]]
+
 local TALL_HEALTHBAR_HEIGHT = 31
 
 local defaults = {
@@ -150,10 +151,10 @@ function Rob:HandleHealthbarAndNameColors()
             else
                 if UnitIsTapDenied(unit) then
                     self:SetStatusBarColor(0.5, 0.5, 0.5, 1)
-                    return
+                else
+                    local r, g, b = UnitSelectionColor(unit)
+                    self:SetStatusBarColor(r, g, b)
                 end
-                local r, g, b = UnitSelectionColor(unit)
-                self:SetStatusBarColor(r, g, b)
             end
         end)
     end
@@ -172,14 +173,28 @@ function Rob:HandleHealthbarAndNameColors()
 
         PlayerStatusTexture:Hide()
     end)
+
+    local eliteIcon = TargetFrame:CreateTexture(nil, "OVERLAY")
+    eliteIcon:SetPoint("RIGHT", TargetFrame, "RIGHT", 60, 0)
+    eliteIcon:SetTexture("Interface\\AddOns\\RobUI\\Textures\\dragon.blp")
+    eliteIcon:Hide()
+
     hooksecurefunc("TargetFrame_Update", function(self)
         TargetFrameTextureFrameTexture:SetTexture(FRAME_TEXTURE)
+
         if Rob.db.profile.isTallHealthbarEnabled then
             self.healthbar:SetHeight(TALL_HEALTHBAR_HEIGHT)
             self.healthbar:SetPoint("TOPLEFT", 7, -22)
             TargetFrameBackground:Hide()
         end
+
+        if UnitExists(TARGET) and UnitClassification(TARGET) == "elite" then
+            eliteIcon:Show()
+        else
+            eliteIcon:Hide()
+        end
     end)
+
 
     -- Class Colored / Unit Selection Colored Target Name Background
     if Rob.db.profile.isClassColoredTargetFrameNameBackgroundEnabled then
